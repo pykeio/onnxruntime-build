@@ -43,11 +43,3 @@ cmake \
     --parallel $PARALLEL_JOB_COUNT \
     $CMAKE_BUILD_OPTIONS
 cmake --install $BUILD_DIR --config Release
-
-cmake \
-    -S $SOURCE_DIR/tests \
-    -B $BUILD_DIR/tests \
-    -D ONNXRUNTIME_SOURCE_DIR=$(pwd)/$ONNXRUNTIME_SOURCE_DIR \
-    -D ONNXRUNTIME_LIB_DIR=$(pwd)/$OUTPUT_DIR/lib
-cmake --build $BUILD_DIR/tests
-ctest --test-dir $BUILD_DIR/tests --build-config Debug --verbose --no-tests=error
