@@ -51,14 +51,14 @@ jobs:
           - target: win-x64-static_lib
             runs-on: windows-2022
             build: >
-              CMAKE_OPTIONS="--compile-no-warning-as-error"
+              CMAKE_OPTIONS="--compile-no-warning-as-error -D CMAKE_CXX_FLAGS=-D_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS"
               ./build-static_lib.sh
             post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
           - target: win-arm64-static_lib
             runs-on: windows-2022
             build: >
-              CMAKE_OPTIONS="-A ARM64 --compile-no-warning-as-error -D onnxruntime_CROSS_COMPILING=ON"
+              CMAKE_OPTIONS="-A ARM64 --compile-no-warning-as-error -D onnxruntime_CROSS_COMPILING=ON -D CMAKE_CXX_FLAGS=-D_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS"
               ./build-static_lib.sh
             post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
