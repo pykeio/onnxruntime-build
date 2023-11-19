@@ -50,33 +50,21 @@ jobs:
 
           - target: win-x64-static_lib
             runs-on: windows-2022
-            build: ./build-static_lib.sh
+            build: >
+              BUILD_OPTIONS="--compile_no_warning_as_error"
+              ./build-static_lib.sh
+            post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
+
+          - target: win-arm64-static_lib
+            runs-on: windows-2022
+            build: >
+              BUILD_OPTIONS="--arm64 --compile_no_warning_as_error"
+              ./build-static_lib.sh
             post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
           - target: wasm-static_lib
             runs-on: ubuntu-latest
             build: ./build-wasm-static_lib.sh
-            post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
-
-          - target: wasm-static_lib-simd
-            runs-on: ubuntu-latest
-            build: >
-              BUILD_OPTIONS="--enable_wasm_simd"
-              ./build-wasm-static_lib.sh
-            post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
-
-          - target: wasm-static_lib-threads
-            runs-on: ubuntu-latest
-            build: >
-              BUILD_OPTIONS="--enable_wasm_threads"
-              ./build-wasm-static_lib.sh
-            post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
-
-          - target: wasm-static_lib-simd-threads
-            runs-on: ubuntu-latest
-            build: >
-              BUILD_OPTIONS="--enable_wasm_simd --enable_wasm_threads"
-              ./build-wasm-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
     steps:
