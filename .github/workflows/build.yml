@@ -12,7 +12,7 @@ on:
 
 env:
   GCC_VERSION: 9
-  CMAKE_VERSION: 3.26
+  CMAKE_VERSION: 3.27
   PYTHON_VERSION: 3.9
   NODE_VERSION: 16
   XCODE_VERSION: 14.2
@@ -31,27 +31,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target: linux-aarch64-static_lib
-            runs-on: buildjet-4vcpu-ubuntu-2204-arm
-            build: >
-              PARALLEL_JOB_COUNT=2
-              ./build-static_lib.sh
-            post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
-
           - target: linux-x64-static_lib
             runs-on: ubuntu-latest
             build: ./build-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
           - target: osx-arm64-static_lib
-            runs-on: ghcr.io/cirruslabs/macos-ventura-xcode:14.2
-            build: ./build-static_lib.sh
-            post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
-
-          - target: osx-universal2-static_lib
-            runs-on: ghcr.io/cirruslabs/macos-ventura-xcode:14.2
+            runs-on: macos-latest
             build: >
-              CMAKE_OPTIONS="-D CMAKE_OSX_ARCHITECTURES=arm64;x86_64"
+              CMAKE_OPTIONS="-D CMAKE_OSX_ARCHITECTURES=arm64"
               ./build-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
@@ -61,7 +49,7 @@ jobs:
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
           - target: win-x64-static_lib
-            runs-on: windows-2019
+            runs-on: windows-2022
             build: ./build-static_lib.sh
             post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
