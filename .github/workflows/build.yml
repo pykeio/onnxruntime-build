@@ -33,10 +33,9 @@ jobs:
         include:
           - target: linux-aarch64-static_lib
             runs-on: ubuntu-latest
-            build: >
+            build: |
               sudo apt-get update && sudo apt install -y gcc make gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
-              CMAKE_OPTIONS="-DCMAKE_TOOLCHAIN_FILE=../../toolchains/default-aarch64-linux-gnu.cmake"
-              ./build-static_lib.sh
+              CMAKE_OPTIONS="-DCMAKE_TOOLCHAIN_FILE=../../toolchains/default-aarch64-linux-gnu.cmake" ./build-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
           - target: linux-x64-static_lib
