@@ -31,47 +31,47 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - target: linux-aarch64-static_lib
+          - target: aarch64-unknown-linux-gnu
             runs-on: ubuntu-latest
             build: |
               sudo apt-get update && sudo apt install -y gcc make gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
               CMAKE_OPTIONS="-DCMAKE_TOOLCHAIN_FILE=../../toolchains/default-aarch64-linux-gnu.cmake" ./build-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
-          - target: linux-x64-static_lib
+          - target: x86_64-unknown-linux-gnu
             runs-on: ubuntu-latest
             build: ./build-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
-          - target: osx-arm64-static_lib
+          - target: aarch64-apple-darwin
             runs-on: macos-latest
             build: >
               CMAKE_OPTIONS="-D CMAKE_OSX_ARCHITECTURES=arm64 -D onnxruntime_USE_COREML=ON"
               ./build-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
-          - target: osx-x86_64-static_lib
+          - target: x86_64-apple-darwin
             runs-on: macos-latest
             build: >
               CMAKE_OPTIONS="-D onnxruntime_USE_COREML=ON"
               ./build-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
-          - target: win-x64-static_lib
+          - target: x86_64-pc-windows-msvc
             runs-on: windows-2022
             build: >
               CMAKE_OPTIONS="--compile-no-warning-as-error -D onnxruntime_USE_DML=ON -D CMAKE_CXX_FLAGS=-D_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS"
               ./build-static_lib.sh
             post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
-          - target: win-arm64-static_lib
+          - target: aarch64-pc-windows-msvc
             runs-on: windows-2022
             build: >
               CMAKE_OPTIONS="-A ARM64 --compile-no-warning-as-error -D onnxruntime_USE_DML=ON -D onnxruntime_CROSS_COMPILING=ON -D CMAKE_CXX_FLAGS=-D_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS"
               ./build-static_lib.sh
             post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
-          - target: wasm-static_lib
+          - target: wasm32-unknown-emscripten
             runs-on: ubuntu-latest
             build: ./build-wasm-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
@@ -140,7 +140,7 @@ jobs:
         run: |
           echo OUTPUT_DIR=./output >> $GITHUB_ENV
           echo ARCHIVE_DIR="${{ runner.temp }}" >> $GITHUB_ENV
-          echo ARCHIVE_NAME=onnxruntime-${{ matrix.target }}-${{ env.ONNXRUNTIME_VERSION }} >> $GITHUB_ENV
+          echo ARCHIVE_NAME=msort_static-v${{ env.ONNXRUNTIME_VERSION }}-${{ matrix.target }} >> $GITHUB_ENV
 
       - name: Build
         run: ${{ matrix.build }}
