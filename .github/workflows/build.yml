@@ -11,7 +11,7 @@ on:
       - v*.*.*
 
 env:
-  GCC_VERSION: 9
+  GCC_VERSION: 8
   CMAKE_VERSION: 3.27
   PYTHON_VERSION: 3.9
   NODE_VERSION: 16
@@ -34,7 +34,7 @@ jobs:
           - target: aarch64-unknown-linux-gnu
             runs-on: ubuntu-20.04
             build: |
-              sudo apt-get update && sudo apt install -y gcc make gcc-aarch64-linux-gnu g++-aarch64-linux-gnu binutils-aarch64-linux-gnu
+              sudo apt-get update && sudo apt install -y gcc make gcc-8-aarch64-linux-gnu g++-8-aarch64-linux-gnu binutils-aarch64-linux-gnu
               CMAKE_OPTIONS="-DCMAKE_TOOLCHAIN_FILE=../../toolchains/default-aarch64-linux-gnu.cmake -Donnxruntime_USE_XNNPACK=ON" ./build-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
