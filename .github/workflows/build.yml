@@ -72,7 +72,7 @@ jobs:
             post-build: 7z a $ARCHIVE_DIR/$ARCHIVE_NAME.zip $OUTPUT_DIR/*
 
           - target: wasm32-unknown-emscripten
-            runs-on: ubuntu-latest
+            runs-on: ubuntu-20.04
             build: ./build-wasm-static_lib.sh
             post-build: tar -czvf $ARCHIVE_DIR/$ARCHIVE_NAME.tgz -C $OUTPUT_DIR .
 
